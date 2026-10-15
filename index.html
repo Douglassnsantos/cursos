@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Projetos de costura da Gabi na Singer Facilita Pro 4423: blusa regata básica e saia reta.">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Ateliê da Gabi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Literata:opsz,wght@7..72,400;7..72,600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: seletor de projetos (cartões com croqui) → curso (trilho de módulos + coluna de aula); papel de molde rosado / base de corte amora; progresso em fita métrica; nome da Gabi em letra de giz */
+:root{
+  --paper:#F6F0F2;
+  --grid:rgba(122,42,86,.065);
+  --surface:#FFFFFF;
+  --ink:#251B22;
+  --muted:#6A5964;
+  --line:#E7DAE0;
+  --chalk:#8C2D63;
+  --chalk-soft:rgba(140,45,99,.08);
+  --on-accent:#FFFFFF;
+  --tape:#F1C232;
+  --tape-ink:#2B2306;
+  --warn:#B8431F;
+  --warn-soft:rgba(184,67,31,.08);
+  --ok:#2E7A52;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"Literata",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1B1319;--grid:rgba(240,200,222,.055);--surface:#251A21;--ink:#F2E8EE;--muted:#B8A2B0;--line:#3D2C37;
+  --chalk:#F08DC0;--chalk-soft:rgba(240,141,192,.11);--on-accent:#2A0F1E;--tape:#F1C232;--tape-ink:#2B2306;--warn:#FF9466;--warn-soft:rgba(255,148,102,.10);--ok:#7FD3A1;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1B1319;--grid:rgba(240,200,222,.055);--surface:#251A21;--ink:#F2E8EE;--muted:#B8A2B0;--line:#3D2C37;
+  --chalk:#F08DC0;--chalk-soft:rgba(240,141,192,.11);--on-accent:#2A0F1E;--tape:#F1C232;--tape-ink:#2B2306;--warn:#FF9466;--warn-soft:rgba(255,148,102,.10);--ok:#7FD3A1;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+::selection{background:var(--tape);color:var(--tape-ink)}
+a{color:var(--chalk)}
+:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.inner{max-width:1180px;margin:0 auto}
+.hand{font-family:var(--f-hand);font-weight:700}
+button{font:inherit}
+
+/* Barra superior */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar .inner{display:flex;align-items:center;gap:16px;padding-block:10px;min-height:52px}
+.brand{font-family:var(--f-hand);font-weight:700;font-size:1.5rem;line-height:1;color:var(--chalk);white-space:nowrap;background:none;border:0;padding:0;cursor:pointer}
+.tape{flex:1;min-width:0;height:22px;border-radius:3px;background:var(--paper);border:1px solid var(--line);overflow:hidden}
+.tape-fill{height:100%;width:0;background-color:var(--tape);
+  background-image:repeating-linear-gradient(90deg,var(--tape-ink) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,var(--tape-ink) 0 1px,transparent 1px 8px);
+  background-size:100% 65%,100% 35%;background-repeat:no-repeat;background-position:left bottom,left bottom;transition:width .45s ease}
+.count{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;margin-left:auto}
+.topbar .tape:not([hidden]) + .count{margin-left:0}
+@media (max-width:560px){.brand{font-size:1.25rem}.count .pct{display:none}}
+
+/* Seletor de projetos */
+.home .inner{padding-block:40px 56px}
+.hi{font-family:var(--f-hand);font-weight:700;font-size:2.1rem;line-height:1;color:var(--chalk);margin:0 0 6px;transform:rotate(-2deg);transform-origin:left center;display:inline-block}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:850;font-stretch:118%;font-size:clamp(2.3rem,5.6vw,4.1rem);line-height:.98;letter-spacing:-.02em;margin:.3em 0 .4em;text-wrap:balance}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--tape) 62% 92%,transparent 92%);padding:0 .05em}
+.lede{font-size:1.08rem;max-width:60ch;margin:0}
+.path{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0 28px;font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.path b{color:var(--ink);font-weight:600}
+.path .arrow{color:var(--chalk)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:760px){.cards{grid-template-columns:1fr}}
+.card{position:relative;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:22px 24px 20px;display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 22px;text-align:left;color:inherit;cursor:pointer;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--chalk);transform:translateY(-2px)}
+.card.first{border:2px dashed var(--chalk)}
+.card .sketch{grid-row:1/6;align-self:start;width:110px;height:auto;max-width:100%}
+.card .k{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{font-family:var(--f-hand);font-size:1.15rem;letter-spacing:0;text-transform:none;background:var(--tape);color:var(--tape-ink);padding:0 8px;border-radius:2px;transform:rotate(-2deg);display:inline-block;line-height:1.35}
+.card h2{font-family:var(--f-display);font-weight:800;font-stretch:112%;font-size:1.5rem;line-height:1.1;margin:2px 0 0;text-wrap:balance}
+.card p{margin:4px 0 0;font-size:.95rem;color:var(--muted)}
+.card .meta{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);margin-top:8px}
+.card .mini{display:flex;align-items:center;gap:10px;margin-top:10px}
+.card .mini .tape{height:14px;display:block;flex:1}
+.card .mini span{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.card .go{grid-column:2;justify-self:start;margin-top:12px;font-family:var(--f-display);font-weight:700;font-size:.95rem;color:var(--on-accent);background:var(--chalk);padding:7px 14px;border-radius:4px}
+@media (max-width:440px){.card{grid-template-columns:1fr}.card .sketch{grid-row:auto;width:84px}.card .go{grid-column:1}}
+
+/* Curso: cabeçalho */
+.back{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.78rem;color:var(--muted);background:none;border:1px solid var(--line);border-radius:3px;padding:5px 10px;cursor:pointer;margin-bottom:18px}
+.back:hover{color:var(--chalk);border-color:var(--chalk)}
+.chero .inner{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:44px;padding-block:28px 28px;align-items:start}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:600}
+.envelope{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px 22px 20px}
+.tag{position:relative;display:grid;justify-items:center;background:var(--chalk);color:var(--on-accent);padding:12px 40px 10px;border-radius:2px;transform:rotate(-2.5deg);margin:2px auto 22px;width:max-content;max-width:100%;box-shadow:0 2px 0 rgba(0,0,0,.08)}
+.tag::before,.tag::after{content:"";position:absolute;top:7px;bottom:7px;border-left:1.5px dashed currentColor;opacity:.6}
+.tag::before{left:13px}.tag::after{right:13px}
+.tag .s{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;opacity:.9}
+.tag .nm{font-family:var(--f-hand);font-weight:700;font-size:2.9rem;line-height:.95}
+.envelope h3{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:500}
+.pieces{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.pieces li{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:baseline}
+.pieces .lt{font-family:var(--f-display);font-weight:800;font-size:1.35rem;color:var(--chalk);line-height:1}
+.pieces .qt{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.envelope hr{border:0;border-top:1.5px dashed var(--line);margin:16px 0}
+.envelope p{margin:0;font-size:.92rem;color:var(--muted)}
+@media (max-width:860px){.chero .inner{grid-template-columns:1fr;gap:24px;padding-block:24px 16px}}
+
+.plan .inner{padding-block:8px 32px}
+.plan h2{font-family:var(--f-display);font-weight:800;font-stretch:112%;font-size:1.35rem;margin:0 0 14px}
+.sessions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.session{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:grid;gap:4px;align-content:start}
+.session .k{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk)}
+.session .t{font-family:var(--f-display);font-weight:700;font-size:1.02rem}
+.session .d{font-size:.88rem;color:var(--muted)}
+@media (max-width:860px){.sessions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.sessions{grid-template-columns:1fr}}
+
+/* Curso: corpo */
+.course .inner{display:grid;grid-template-columns:240px minmax(0,1fr);gap:36px;padding-block:8px 64px;align-items:start}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 68px);max-height:calc(100vh - 90px);overflow:auto;padding-right:4px}
+.rail h2{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+.navlist{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.navlist a{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:baseline;padding:6px 8px;border-radius:3px;text-decoration:none;color:var(--ink);font-size:.9rem;line-height:1.3}
+.navlist a:hover{background:var(--chalk-soft)}
+.n{font-family:var(--f-mono);font-size:.76rem;color:var(--muted)}
+.c{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+a.done .c{color:var(--ok)}
+a.done .ttl{color:var(--muted)}
+.rail-actions{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line)}
+.mobile-nav{display:none}
+@media (max-width:960px){
+  .course .inner{grid-template-columns:1fr;gap:16px}
+  .rail{display:none}
+  .mobile-nav{display:block;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 14px}
+  .mobile-nav summary{cursor:pointer;font-family:var(--f-display);font-weight:700}
+  .mobile-nav .navlist{margin:10px 0 4px}
+}
+
+.modules{display:grid;gap:22px;min-width:0}
+.finale{border:2px dashed var(--chalk);background:var(--chalk-soft);border-radius:4px;padding:22px 24px;text-align:center;display:grid;gap:10px;justify-items:center}
+.finale .hand{font-size:2.8rem;line-height:1;color:var(--chalk)}
+.finale p{margin:0;max-width:52ch}
+.finale button{font-family:var(--f-display);font-weight:700;color:var(--on-accent);background:var(--chalk);border:0;border-radius:4px;padding:8px 16px;cursor:pointer}
+.module{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:24px 26px 22px;scroll-margin-top:80px;min-width:0;transition:border-color .3s}
+.module.done{border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.mhead{display:grid;grid-template-columns:auto 1fr auto;gap:4px 18px;align-items:start;margin-bottom:14px;padding-bottom:14px;border-bottom:1.5px dashed var(--line)}
+.mnum{font-family:var(--f-display);font-weight:850;font-stretch:120%;font-size:2.6rem;line-height:.9;color:var(--chalk);font-variant-numeric:tabular-nums}
+.mtitle{font-family:var(--f-display);font-weight:800;font-stretch:110%;font-size:1.45rem;line-height:1.15;margin:0;text-wrap:balance}
+.mmeta{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);margin-top:4px}
+.mstatus{font-family:var(--f-mono);font-size:.74rem;padding:3px 8px;border-radius:3px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.module.done .mstatus{border-color:var(--ok);color:var(--ok)}
+.intro{margin:0 0 14px;max-width:68ch}
+@media (max-width:520px){.module{padding:18px 16px}.mhead{grid-template-columns:auto 1fr}.mstatus{grid-column:1/-1;justify-self:start}.mnum{font-size:2.1rem}}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.step label{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;padding:9px 10px;border-radius:3px;cursor:pointer;align-items:start}
+.step label:hover{background:var(--chalk-soft)}
+.step input{appearance:none;-webkit-appearance:none;width:20px;height:20px;margin:3px 0 0;border:1.5px solid var(--muted);border-radius:50%;background:var(--surface);display:grid;place-content:center;cursor:pointer;transition:background .15s,border-color .15s}
+.step input::after{content:"";width:9px;height:5px;border-left:2.5px solid var(--on-accent);border-bottom:2.5px solid var(--on-accent);transform:rotate(-45deg) translate(1px,-1px) scale(.4);opacity:0;transition:transform .18s,opacity .18s}
+.step input:checked{background:var(--chalk);border-color:var(--chalk)}
+.step input:checked::after{opacity:1;transform:rotate(-45deg) translate(1px,-1px) scale(1)}
+.step input:checked + span{color:var(--muted)}
+.step span{max-width:68ch}
+.step b{font-weight:600}
+.v{font-family:var(--f-mono);font-weight:600;background:var(--chalk-soft);color:var(--chalk);padding:0 .3em;border-radius:2px;white-space:nowrap}
+
+.note{margin-top:14px;border:1.5px dashed var(--chalk);border-radius:4px;padding:12px 16px;background:var(--chalk-soft)}
+.note.warn{border-color:var(--warn);background:var(--warn-soft)}
+.note .lbl{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk);display:block;margin-bottom:2px;font-weight:600}
+.note.warn .lbl{color:var(--warn)}
+.note p{margin:0;max-width:68ch;font-size:.95rem}
+
+/* Calculadora */
+.calc{margin-top:18px;border-top:1.5px dashed var(--line);padding-top:18px;display:grid;gap:18px}
+.calc h3{font-family:var(--f-display);font-weight:800;font-size:1.1rem;margin:0}
+.sample{font-family:var(--f-mono);font-size:.76rem;color:var(--warn)}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.field{display:grid;gap:4px;min-width:0}
+.field label{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.field .box{display:flex;align-items:center;border:1px solid var(--line);border-radius:3px;background:var(--paper)}
+.field .box:focus-within{border-color:var(--chalk)}
+.field input,.field select{width:100%;min-width:0;border:0;background:transparent;color:var(--ink);font-family:var(--f-mono);font-size:1.02rem;padding:8px 6px 8px 10px;font-variant-numeric:tabular-nums}
+.field input:focus,.field select:focus{outline:none}
+.field .u{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);padding-right:10px}
+.results{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;align-items:start}
+@media (max-width:760px){.results{grid-template-columns:1fr}}
+.rtable{width:100%;border-collapse:collapse;font-size:.92rem}
+.rtable th{text-align:left;font-weight:400;color:var(--muted);padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.rtable td{text-align:right;font-family:var(--f-mono);font-weight:600;padding:7px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.drawing{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:10px;overflow-x:auto}
+.drawing svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
+.calc-msg{font-size:.9rem;color:var(--warn);margin:0}
+
+.machine{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.part{border:1px solid var(--line);border-radius:3px;padding:10px 12px;background:var(--paper)}
+.part .pn{font-family:var(--f-display);font-weight:700;font-size:.95rem;display:block}
+.part .pd{font-size:.86rem;color:var(--muted)}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow .sy{font-weight:600}
+@media (max-width:600px){.trow{grid-template-columns:1fr;gap:2px}}
+
+.btn{font-family:var(--f-mono);font-size:.78rem;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:6px 10px;border-radius:3px;cursor:pointer}
+.btn:hover{border-color:var(--warn);color:var(--warn)}
+.btn.armed{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:20;transform:translate(-50%,16px);opacity:0;pointer-events:none;
+  background:var(--ink);color:var(--paper);border-radius:6px;padding:12px 20px 12px 18px;display:flex;align-items:baseline;gap:12px;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgba(0,0,0,.18);transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .hand{font-size:1.6rem;line-height:1;color:var(--tape);white-space:nowrap}
+.toast span:last-child{font-size:.95rem}
+
+footer .inner{padding-block:0 48px;font-size:.85rem;color:var(--muted);display:grid;gap:6px}
+footer .hand{font-size:1.5rem;color:var(--chalk)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar gutter">
+  <div class="inner">
+    <button class="brand" id="brand" type="button">Ateliê da Gabi</button>
+    <div class="tape" id="topTape" role="progressbar" aria-label="Progresso do projeto" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><div class="tape-fill" id="topFill"></div></div>
+    <span class="count" id="topCount">2 projetos</span>
+  </div>
+</header>
+
+<main id="home" class="home gutter">
+  <div class="inner">
+    <p class="hi">Oi, Gabi!</p>
+    <div class="eyebrow">Curso de costura · Singer Facilita Pro 4423</div>
+    <h1>Seus projetos de <em>costura</em></h1>
+    <p class="lede">Escolha um projeto para abrir o passo a passo. Comece pela regata: ela ensina a base, com pence, viés e bainha. Depois, a saia reta junta tudo isso com zíper, cós e casa de botão.</p>
+    <div class="path"><b>1 · Regata</b><span class="arrow">→</span><b>2 · Saia reta</b><span>· cada um com molde sob medida e progresso salvo</span></div>
+    <div class="cards" id="cards"></div>
+  </div>
+</main>
+
+<div id="views"></div>
+
+<footer class="gutter"><div class="inner"><span class="hand">Feito com carinho para a Gabi</span><span>Os moldes da calculadora seguem uma modelagem básica. A prova de cada projeto é onde o molde se ajusta ao seu corpo: anote os ajustes no papel para a próxima peça.</span></div></footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="hand">Boa, Gabi!</span><span id="toastMsg"></span></div>
+
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const fmt=x=>Number(x).toLocaleString("pt-BR",{maximumFractionDigits:1});
+const r5=x=>Math.round(x*2)/2;
+const V=k=>`<b class="v" data-v="${k}">–</b>`;
+const MONO='font-family="IBM Plex Mono, monospace"';
+
+/* ---------- Conteúdo compartilhado ---------- */
+const MACHINE=[
+["Sapatilha universal","Vem instalada. Costuras, pences, pespontos e chuleado."],
+["Sapatilha de zíper","Aplicação de zíper."],
+["Sapatilha de casa","Casa de 1 passo no tamanho do botão."],
+["Sapatilha de pregar botão","Prega o botão com zigue-zague."],
+["Passador de linha","Enfia a linha no olho da agulha."],
+["Rebaixador dos dentes","Abaixa os dentes para pregar botão."],
+["Parafuso de pressão","Ajusta a pressão da sapatilha, girado com uma moeda."],
+["Ponto de 0 a 4 mm","O máximo, 4 mm, é o alinhavo."],
+["Zigue-zague até 6 mm","Usado no chuleado e no botão."],
+["Braço livre","Tire a extensão da base para golas, cavas e bainhas."]
+];
+const TROUBLE=[
+["Ninho de linha embaixo do tecido","A linha de cima saiu dos discos de tensão. Passe a linha de novo com a sapatilha levantada."],
+["Pontos pulando","Agulha cega, torta ou do tamanho errado. Troque a agulha."],
+["Agulha quebra nas partes grossas","Vá devagar, gire o volante à mão sobre as emendas e use agulha mais grossa."],
+["Tecido franzindo","Tensão alta ou ponto curto demais. Teste tensão entre 3 e 4 e ponto entre 2,5 e 3."],
+["Linha da bobina aparecendo por cima","Tensão de cima alta. Baixe meio número e teste."],
+["Tecido não anda","Confira se a sapatilha está abaixada e se os dentes não ficaram rebaixados."]
+];
+const prepTecido=done=>({t:"Preparar o tecido",time:"30 min + lavagem",done,intro:"Tecido que encolhe depois de pronto estraga a peça. Este passo parece chato e é o que garante o tamanho certo.",
+steps:[
+"<b>Lave e seque</b> o tecido do mesmo jeito que vai lavar a peça. Isso pré-encolhe.",
+"<b>Passe a ferro</b> todo o tecido, sem vincos.",
+"<b>Ache o direito e o avesso.</b> Na dúvida, o direito costuma ter a cor mais viva ou a trama mais bonita.",
+"<b>Ache a ourela</b>, a borda de fábrica que não desfia. Ela mostra a direção do fio reto.",
+"<b>Dobre ao meio</b> no comprimento, ourela com ourela, direito com direito."
+]});
+const prepMaquina=(done,needle)=>({t:"Preparar a Facilita Pro 4423",time:"30 min",done,intro:"Uma máquina bem passada e regulada resolve a maior parte dos problemas de iniciante. A Singer chama o calcador de sapatilha; no manual você vai ver esse nome. Siga as figuras do manual junto com estes passos.",
+steps:[
+`<b>Troque a agulha</b> por uma nova ${needle}. O lado chato do topo da agulha fica virado para trás.`,
+"<b>Encha a bobina</b> com as bobinas que vieram com a máquina, ou iguais a elas. Passe a linha pelo guia da bobinadeira, encaixe a bobina no eixo, empurre o eixo para a direita e pise no pedal, como mostra o manual.",
+"<b>Coloque a bobina:</b> com a sapatilha levantada, destrave a tampa da bobina, coloque a bobina com a linha saindo no sentido do desenho da máquina, passe a linha pela fenda e feche a tampa.",
+"<b>Passe a linha de cima</b> com a sapatilha levantada e a agulha no ponto mais alto. Sapatilha levantada abre os discos de tensão; sem isso a linha embola.",
+"<b>Enfie a agulha</b> com o passador de linha e puxe a linha da bobina para cima.",
+"<b>Regule:</b> ponto reto, comprimento 2,5 mm. A tensão vem de fábrica entre 3 e 5: comece no 4.",
+"<b>Teste num retalho</b> do mesmo tecido dobrado em dois. Os pontos devem ficar iguais dos dois lados.",
+"<b>Treine o pedal</b> costurando retas e curvas num retalho. Pise devagar: a máquina chega a 1.100 pontos por minuto."
+],machine:true,
+notes:[{k:"Na sua Facilita Pro",p:"Se os pontos ficarem bons no retalho, anote os números que você usou. Eles valem para todas as costuras retas da peça."}]});
+
+/* ---------- Regata ---------- */
+const REGATA_MODULES=[
+{t:"Planejamento",time:"30 min",done:"Planejamento feito. Agora é medir.",intro:"A regata é o melhor primeiro projeto: duas peças, sem zíper e sem botão. Nela você aprende pence, costura reta, acabamento com viés e bainha.",
+steps:[
+"<b>Defina o modelo:</b> regata solta, de tecido plano, com decote redondo e alças de 5 cm. Ela veste pela cabeça, sem fecho.",
+"<b>Defina o comprimento:</b> até o quadril (uns 60 a 65 cm, medidos do ombro) combina com calça e saia e é o mais fácil.",
+"<b>Escolha o tecido:</b> tricoline ou cambraia de algodão, plano e sem elastano. São firmes, não escorregam e marcam bem com o ferro.",
+"<b>Evite nesta primeira vez:</b> viscose, crepe e cetim (escorregam), malha (estica e pede outros pontos) e estampas que precisam casar.",
+"<b>Compre a metragem</b> indicada pela calculadora do módulo 2. Em geral é um comprimento da blusa + uns 20 cm, em tecido de 1,40 a 1,50 m.",
+"<b>Aviamentos:</b> viés pronto de algodão de 2 cm (a quantidade sai na calculadora), na cor do tecido ou contrastando, e 1 carretel de linha de poliéster.",
+"<b>Ferramentas:</b> fita métrica, régua grande, papel kraft ou papel manteiga, lápis, giz de alfaiate, alfinetes, tesoura só para tecido, tesoura de papel e ferro de passar.",
+"<b>Agulha nova:</b> 80/12 para tricoline ou 70/10 para cambraia fina."
+],
+notes:[{k:"Dica",p:"O viés pronto já vem com as bordas dobradas a ferro. Isso deixa o acabamento do decote e das cavas bem mais fácil na primeira peça."}]},
+
+{t:"Medidas e cálculo",time:"20 min",done:"Medidas anotadas.",intro:"Meça com um sutiã que você usa no dia a dia: ele muda a altura e a medida do busto. Peça ajuda para as medidas das costas e do busto.",
+steps:[
+"<b>Busto:</b> na parte mais cheia, com a fita passando nas costas na mesma altura.",
+"<b>Quadril:</b> na parte mais larga, para conferir se a barra da blusa vai passar.",
+"<b>Altura do busto:</b> do ombro, rente ao pescoço, até o bico do seio.",
+"<b>Separação do busto:</b> de um bico ao outro, em linha reta.",
+"<b>Comprimento:</b> do ombro, rente ao pescoço, até onde a blusa vai terminar.",
+"<b>Cabeça:</b> em volta da cabeça, na parte mais larga (testa e nuca). Serve para garantir que o decote passe.",
+"<b>Digite as medidas</b> na calculadora abaixo e anote o resultado no papel do molde."
+],calc:true},
+
+{t:"Molde de papel",time:"60 min",done:"Molde pronto! A parte mais técnica passou.",intro:"Você desenha metade das costas e metade da frente. As duas peças são cortadas na dobra do tecido, então a regata tem só duas partes, unidas pelos ombros e pelas laterais.",
+steps:[
+`<b>Retângulo das costas:</b> largura ${V("Wh")} cm e altura ${V("L")} cm. O lado esquerdo é o centro (dobra), o direito é a lateral.`,
+`<b>Linha da cava:</b> risque uma linha horizontal a ${V("cava")} cm do topo. Nela, marque o fundo da cava a ${V("Wb")} cm do centro.`,
+`<b>Lateral:</b> ligue o fundo da cava à barra, que termina a ${V("Wh")} cm do centro.`,
+`<b>Decote das costas:</b> no topo, marque a base do pescoço a ${V("nw")} cm do centro. No centro, desça ${V("bd")} cm. Ligue com uma curva suave que sai reta do centro.`,
+"<b>Alça:</b> a partir da base do pescoço, marque 5 cm no topo e desça 1 cm na ponta de fora. Essa pequena queda acompanha o ombro.",
+"<b>Cava:</b> ligue a ponta de fora da alça ao fundo da cava com uma curva que chega reta na lateral.",
+`<b>Frente:</b> copie as costas e mude três coisas: o decote desce ${V("fd")} cm no centro, a barra desce ${V("D")} cm e a frente ganha a pence de busto.`,
+`<b>Pence de busto:</b> na lateral da frente, a ${V("sy")} cm do topo, marque a pence com ${V("D")} cm de abertura. A ponta fica a ${V("ab")} cm do topo e a ${V("tipX")} cm do centro, 2,5 cm antes do bico do seio.`,
+`<b>Confira o decote:</b> ${V("neckTxt")}. A volta do decote precisa ser pelo menos 4 cm maior que a cabeça, porque o tecido não estica.`,
+"<b>Margens de costura:</b> ombros 1 cm, laterais 1,5 cm, barra 2 cm, decote e cavas 0,6 cm (a costura do viés). O centro não tem margem: vai na dobra.",
+"<b>Recorte</b> as duas peças de papel e escreva nelas: nome, \"cortar 1× na dobra\" e as suas medidas."
+],
+notes:[{k:"Dica",p:"As curvas do decote e da cava devem sair em ângulo reto do centro e da lateral. Assim não aparecem bicos quando a frente e as costas se encontram."}]},
+
+prepTecido("Tecido lavado e passado."),
+
+{t:"Corte e marcação",time:"40 min",done:"Peças cortadas. Agora é com a máquina.",intro:"Meça duas vezes, corte uma. Marque tudo no avesso, com giz.",
+steps:[
+"<b>Costas e frente:</b> encoste o centro de cada molde exatamente na dobra do tecido.",
+"<b>Prenda</b> com alfinetes ou pesos e contorne o molde com giz.",
+"<b>Corte</b> com a tesoura de tecido, em cortes longos, sem levantar o tecido da mesa.",
+"<b>Piques:</b> corte pequeno de 3 mm na margem para marcar o centro do decote na frente e nas costas.",
+"<b>Pence:</b> marque as duas pernas da pence com piques na lateral e a ponta com um alfinete. Risque a pence no avesso.",
+"<b>Identifique as peças:</b> escreva F e C com giz no avesso. No tricoline, direito e avesso quase não se diferenciam."
+],
+notes:[{k:"Atenção",warn:true,p:"Nunca corte papel com a tesoura de tecido. Ela perde o fio rápido e passa a mastigar o tecido."}]},
+
+prepMaquina("Máquina pronta para costurar.","80/12 (ou 70/10 para cambraia)"),
+
+{t:"Chulear as bordas",time:"15 min",done:"Bordas chuleadas.",intro:"Tecido plano desfia. Sem máquina overloque, o zigue-zague faz esse acabamento antes de montar.",
+steps:[
+"<b>Selecione o zigue-zague</b> com largura perto de 4 mm e comprimento perto de 1,5.",
+"<b>Teste num retalho:</b> a agulha deve cair dentro do tecido de um lado e logo fora da borda do outro, abraçando a beirada.",
+"<b>Chuleie</b> os ombros e as laterais das duas peças. Decote, cavas e barra não precisam: o viés e a bainha dobrada cobrem essas bordas.",
+"<b>Volte</b> para ponto reto, comprimento 2,5."
+]},
+
+{t:"Pences de busto",time:"15 min",done:"Pences prontas. A blusa já tem forma.",intro:"A pence de busto dá espaço para o seio e faz a frente cair reta, sem repuxar para cima.",
+steps:[
+"<b>Dobre a pence</b> direito com direito, casando os dois piques da lateral. Prenda com alfinete.",
+"<b>Costure</b> da lateral para a ponta. No último 1,5 cm, vá chegando bem perto da dobra até sair do tecido.",
+"<b>Na lateral</b>, use a alavanca de retrocesso para travar a costura.",
+"<b>Na ponta, não dê ré.</b> Deixe 10 cm de linha e dê dois nós à mão.",
+"<b>Passe</b> as pences viradas para baixo, sobre uma toalha enrolada."
+]},
+
+{t:"Ombros e prova",time:"35 min",done:"Prova feita.",intro:"Antes do viés, vista a blusa alinhavada para conferir o decote, a cava e a pence.",
+steps:[
+"<b>Una frente e costas</b> pelos ombros, direito com direito, margem de 1 cm, com retrocesso nas pontas.",
+"<b>Abra as costuras</b> dos ombros a ferro.",
+"<b>Alinhave as laterais</b> com ponto 4 mm, sem retrocesso.",
+"<b>Prove:</b> a blusa passa pela cabeça sem forçar? A cava não aperta nem mostra o sutiã? A ponta da pence fica uns 2 a 3 cm antes do bico?",
+"<b>Ajuste:</b> se a cava apertar, aprofunde 1 cm. Se estiver larga, aumente as laterais igual dos dois lados. Anote tudo no molde de papel.",
+"<b>Desmanche o alinhavo</b> das laterais. Com a blusa aberta dos lados, o viés das cavas fica mais fácil."
+]},
+
+{t:"Viés no decote",time:"40 min",done:"Decote pronto. É a parte que mais aparece!",intro:"O viés vai costurado pelo direito e virado para dentro. Por fora, fica só um pesponto limpo em volta do decote.",
+steps:[
+"<b>Comece nas costas</b>, perto de um ombro. Dobre a ponta do viés 1 cm para dentro.",
+"<b>Abra uma das dobras</b> do viés e posicione direito com direito na borda do decote, borda com borda. Prenda com alfinetes, sem esticar o tecido.",
+"<b>Costure em cima do vinco</b> do viés, a uns 6 mm da borda. Vá devagar e, nas curvas, pare com a agulha baixada para girar o tecido.",
+"<b>Ao dar a volta</b>, passe 1 cm por cima da ponta dobrada e corte o resto do viés.",
+"<b>Pique a margem</b> na curva a cada 1,5 cm, sem cortar a costura. Isso deixa a curva deitar.",
+"<b>Vire o viés todo para o avesso</b>, junto com a margem. Passe deixando a costura 1 a 2 mm para dentro, escondida.",
+"<b>Pesponte pelo direito</b> a 5 mm da borda, dando a volta toda e prendendo o viés por dentro."
+],
+notes:[{k:"Na sua Facilita Pro",p:"Depois dos ombros, o decote vira um círculo. Tire a extensão da base e use o braço livre: o decote gira em volta da máquina sem amassar."}]},
+
+{t:"Viés nas cavas",time:"30 min",done:"Cavas prontas.",intro:"Com as laterais abertas, cada cava é uma curva aberta. É o mesmo método do decote, sem precisar emendar o viés.",
+steps:[
+"<b>Posicione o viés</b> direito com direito em toda a cava, de uma lateral à outra, borda com borda.",
+"<b>Costure</b> em cima do vinco, a 6 mm da borda, girando nas curvas com a agulha baixada.",
+"<b>Pique a margem</b> na curva, sem cortar a costura.",
+"<b>Vire o viés</b> para o avesso e passe com a costura 1 a 2 mm para dentro.",
+"<b>Pesponte pelo direito</b> a 5 mm da borda.",
+"<b>Corte o viés</b> rente à borda das laterais. Repita na outra cava."
+]},
+
+{t:"Laterais",time:"25 min",done:"Laterais fechadas. Já é uma blusa!",intro:"Agora a regata se fecha. A costura passa por cima das pontas do viés das cavas.",
+steps:[
+"<b>Una frente e costas</b> pelas laterais, direito com direito, casando o fundo das cavas e a barra.",
+"<b>Costure com 1,5 cm</b> de margem e retrocesso nas duas pontas. Ao passar pelo viés da cava, vá devagar.",
+"<b>Abra as costuras</b> a ferro.",
+"<b>No fundo da cava</b>, prenda as margens abertas com dois pontinhos à mão, para o viés ficar deitado por dentro."
+]},
+
+{t:"Bainha",time:"30 min",done:"Bainha feita. Falta pouco!",intro:"Uma bainha estreita, dobrada duas vezes, fica firme e não precisa de chuleado.",
+steps:[
+"<b>Prove</b> e confira o comprimento.",
+"<b>Dobre 1 cm</b> para o avesso e passe. Dobre mais 1 cm e passe de novo.",
+"<b>Prenda com alfinetes</b>, casando as costuras laterais.",
+"<b>Pesponte</b> rente à dobra de dentro, pelo avesso, dando a volta toda. No final, passe 1 cm por cima do começo."
+],
+notes:[{k:"Na sua Facilita Pro",p:"A barra também é um círculo: use o braço livre de novo, como no decote."}]},
+
+{t:"Acabamento",time:"15 min",done:"Regata pronta!",intro:"Os últimos detalhes fazem a blusa parecer comprada.",
+steps:[
+"<b>Corte as linhas</b> soltas, por dentro e por fora.",
+"<b>Passe a blusa toda</b>, com atenção ao decote e às cavas.",
+"<b>Vista</b> e confira caimento, decote e cavas.",
+"<b>Anote</b> no molde o que você mudaria na próxima regata."
+],trouble:true}
+];
+
+const regataCalc={
+fields:[
+{k:"b",l:"Busto",min:60,max:170,def:92},
+{k:"q",l:"Quadril",min:60,max:180,def:100},
+{k:"ab",l:"Alt. busto",min:15,max:40,def:26},
+{k:"sep",l:"Separação",min:10,max:30,def:19},
+{k:"L",l:"Comprimento",min:35,max:90,def:62},
+{k:"cab",l:"Cabeça",min:45,max:65,def:56},
+{k:"D",l:"Pence",sel:[["2","Busto pequeno · 2 cm"],["3","Busto médio · 3 cm"],["4","Busto maior · 4 cm"]],def:"3"},
+{k:"fw",l:"Larg. tecido",sel:[["110","1,10 m"],["140","1,40 m"],["150","1,50 m"]],def:"150"}
+],
+rows:[["Largura no busto (¼ busto + 2 cm)","Wb"," cm"],["Largura na barra","Wh"," cm"],["Altura da cava","cava"," cm"],["Decote: largura · frente · costas","neck",""],["Pence de busto","dartShort",""],["Volta do decote","perTxt",""],["Tecido para comprar","fab",""],["Viés pronto de 2 cm","viesTxt",""]],
+compute(x){
+  const {b,q,ab,sep,L,cab,D,fw}=x;
+  if(![b,q,ab,sep,L,cab].every(n=>n>0)) return {error:"Preencha todas as medidas para calcular o molde."};
+  const Wb=b/4+2, Wh=Math.max(Wb,q/4+2.5), cava=b/8+7.5;
+  if(L<cava+15) return {error:"O comprimento parece curto para essa medida de busto. Confira as medidas."};
+  if(ab<cava-4||ab>cava+16) return {error:"Confira a altura do busto: ela costuma ficar alguns centímetros abaixo do fundo da cava."};
+  const qp=(a,c)=>Math.PI/4*(3*(a+c)-Math.sqrt((3*a+c)*(a+3*c)));
+  let nw=10,fd=13,bd=7,per=2*(qp(nw,fd)+qp(nw,bd)),wid=false;
+  while(per<cab+4&&fd<18){fd+=0.5;nw=Math.min(12,nw+0.25);per=2*(qp(nw,fd)+qp(nw,bd));wid=true}
+  const sy=Math.max(cava+3,ab+1), tipX=sep/2+2.5;
+  const one=4*Wh+6<=fw-4;
+  let cm=one?L+D+18:2*(L+D+3)+15; cm=Math.ceil(cm/10)*10;
+  const arm=2*1.15*Math.hypot(Wb-(nw+5),cava-1);
+  const vies=Math.ceil((per+2*arm+30)/50)*50;
+  const v={b,q,ab,sep,L,cab,D,Wb:r5(Wb),Wh:r5(Wh),cava:r5(cava),nw:r5(nw),fd:r5(fd),bd,sy:r5(sy),tipX:r5(tipX),per:Math.round(per),one,cm,vies};
+  const out={Wb:fmt(v.Wb),Wh:fmt(v.Wh),cava:fmt(v.cava),L:fmt(L),ab:fmt(ab),D:fmt(D),nw:fmt(v.nw),fd:fmt(v.fd),bd:fmt(bd),sy:fmt(v.sy),tipX:fmt(v.tipX),
+    neck:`${fmt(v.nw)} · ${fmt(v.fd)} · ${fmt(bd)} cm`,dartShort:`${fmt(D)} cm a ${fmt(v.sy)} cm do topo`,
+    perTxt:`${v.per} cm (cabeça ${fmt(cab)})`,
+    neckTxt:`a volta do seu decote fica com uns ${v.per} cm e a cabeça mede ${fmt(cab)} cm${wid?"; a calculadora já aumentou o decote para passar":""}`,
+    fab:`${fmt(cm/100)} m${one?"":" (2 comprimentos)"}`,viesTxt:`${fmt(vies/100)} m`};
+  return {v,out};
+},
+draw(v){
+  const H=v.L+v.D, W=v.Wh, s=Math.min(170/W,300/H);
+  const pw=W*s, gap=90, padL=44, padT=40, vbW=padL+pw+gap+pw+40, vbH=padT+H*s+44;
+  const panel=(ox,front)=>{
+    const X=x=>(ox+x*s).toFixed(1), Y=y=>(padT+y*s).toFixed(1);
+    const nd=front?v.fd:v.bd, h=front?H:v.L, sx=v.nw+5;
+    const d=`M${X(0)},${Y(nd)} C${X(v.nw*0.5)},${Y(nd)} ${X(v.nw)},${Y(nd*0.4)} ${X(v.nw)},${Y(0)} L${X(sx)},${Y(1)} C${X(sx+0.4)},${Y(v.cava*0.5)} ${X(v.Wb-(v.Wb-sx)*0.55)},${Y(v.cava)} ${X(v.Wb)},${Y(v.cava)} L${X(v.Wh)},${Y(h)} L${X(0)},${Y(h)} Z`;
+    let g=`<path d="${d}" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6"/>`;
+    g+=`<line x1="${X(0)}" y1="${Y(v.cava)}" x2="${X(v.Wb)}" y2="${Y(v.cava)}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>`;
+    g+=`<text x="${(+X(v.Wb)+5)}" y="${(+Y(v.cava)+3)}" font-size="9.5" fill="var(--muted)" ${MONO}>cava</text>`;
+    if(front){
+      const xs=v.Wb+(v.Wh-v.Wb)*(v.sy-v.cava)/(h-v.cava);
+      g+=`<path d="M${X(xs)},${Y(v.sy-v.D/2)} L${X(v.tipX)},${Y(v.ab)} L${X(xs)},${Y(v.sy+v.D/2)} Z" fill="var(--chalk-soft)" stroke="var(--chalk)" stroke-width="1.3"/>`;
+      g+=`<circle cx="${X(v.sep/2)}" cy="${Y(v.ab)}" r="2.6" fill="var(--warn)"/><text x="${X(v.sep/2)}" y="${(+Y(v.ab)-6)}" text-anchor="middle" font-size="9" fill="var(--warn)" ${MONO}>bico</text>`;
+      g+=`<text transform="translate(${(+X(0)-8)},${Y(h*0.62)}) rotate(-90)" text-anchor="middle" font-size="10" fill="var(--chalk)" ${MONO}>DOBRA</text>`;
+    }else{
+      g+=`<text transform="translate(${(+X(0)-8)},${Y(h*0.62)}) rotate(-90)" text-anchor="middle" font-size="10" fill="var(--chalk)" ${MONO}>DOBRA</text>`;
+    }
+    const ax=W*0.5, a1=v.cava+6, a2=h-6;
+    g+=`<line x1="${X(ax)}" y1="${Y(a1)}" x2="${X(ax)}" y2="${Y(a2)}" stroke="var(--muted)" stroke-width="1.2"/><path d="M${X(ax)},${Y(a1)} l-4,8 h8 Z M${X(ax)},${Y(a2)} l-4,-8 h8 Z" fill="var(--muted)"/>`;
+    g+=`<text x="${X(W/2)}" y="${padT-20}" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)" font-family="Archivo, Arial, sans-serif">${front?"A · FRENTE":"B · COSTAS"}</text>`;
+    g+=`<text x="${X(W/2)}" y="${padT-6}" text-anchor="middle" font-size="10" fill="var(--muted)" ${MONO}>${fmt(v.Wh)} cm</text>`;
+    g+=`<text x="${X(W/2)}" y="${(+Y(h)+16)}" text-anchor="middle" font-size="10" fill="var(--muted)" ${MONO}>${fmt(h)} cm</text>`;
+    return g;
+  };
+  return `<svg viewBox="0 0 ${vbW.toFixed(0)} ${vbH.toFixed(0)}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Molde da metade da frente e da metade das costas da regata">${panel(padL,true)}${panel(padL+pw+gap,false)}<text x="${vbW/2}" y="${vbH-6}" text-anchor="middle" font-size="9.5" fill="var(--muted)" ${MONO}>sem margens de costura · pence em destaque</text></svg>`;
+}};
+
+/* ---------- Saia ---------- */
+const SAIA_MODULES=[
+{t:"Planejamento",time:"30 min",done:"Planejamento feito. Agora é medir.",intro:"Antes de comprar qualquer coisa, decida como a saia vai ficar. Escolhas simples agora poupam frustração depois.",
+steps:[
+"<b>Defina o comprimento.</b> Acima do joelho (uns 50 cm) é o mais fácil. Na altura do joelho (55 a 60 cm) a saia precisa de uma fenda atrás para dar o passo.",
+"<b>Escolha o tecido:</b> plano, sem elastano e de peso médio. Boas opções para a primeira saia: sarja leve, gabardine, linho misto ou tricoline encorpada.",
+"<b>Evite nesta primeira vez:</b> tecidos que escorregam (cetim, viscose), xadrez ou listras (precisam casar nas costuras) e malhas.",
+"<b>Compre a metragem</b> indicada pela calculadora do módulo 2. Em geral é o comprimento da saia + uns 30 cm, em tecido de 1,40 a 1,50 m de largura.",
+"<b>Aviamentos:</b> zíper comum de nylon de 20 cm na cor do tecido, 1 botão de 1,5 a 2 cm, 30 cm de entretela termocolante média e 1 carretel de linha de poliéster.",
+"<b>Ferramentas:</b> fita métrica, régua grande, papel kraft ou papel manteiga para o molde, lápis, giz de alfaiate, alfinetes, tesoura só para tecido, tesoura de papel e ferro de passar.",
+"<b>Agulha nova</b> no tamanho certo: 80/12 para tricoline, 90/14 para sarja, gabardine e linho, 100/16 se for jeans."
+],
+notes:[{k:"Na sua Facilita Pro",p:"A estrutura interna é de metal e a base é de aço inox, então a máquina aguenta tecidos grossos. Mesmo assim, um tecido médio deixa a primeira saia bem mais fácil de controlar."}]},
+
+{t:"Medidas e cálculo",time:"20 min",done:"Medidas anotadas.",intro:"Tire as medidas com roupa fina, a fita justa sem apertar. Peça ajuda para medir o quadril e a altura do quadril: sozinha, a fita entorta.",
+steps:[
+"<b>Cintura:</b> na parte mais fina do tronco, onde o cós vai ficar.",
+"<b>Quadril:</b> na parte mais larga do bumbum, com a fita bem na horizontal.",
+"<b>Altura do quadril:</b> pela lateral do corpo, da cintura até a linha do quadril. Costuma dar entre 18 e 21 cm.",
+"<b>Comprimento:</b> da cintura até onde a saia vai terminar.",
+"<b>Digite as medidas</b> na calculadora abaixo e anote o resultado no papel do molde."
+],calc:true},
+
+{t:"Molde de papel",time:"60 min",done:"Molde pronto! A parte mais técnica passou.",intro:"Você desenha só um quarto da saia: um quarto da frente e um quarto das costas. A frente é cortada na dobra do tecido e vira uma peça inteira. As costas são cortadas em duas, com costura no meio para o zíper e a fenda.",
+steps:[
+`<b>Retângulo da frente:</b> largura ${V("W")} cm e altura ${V("L")} cm. O lado esquerdo é o centro da frente (dobra), o direito é a lateral.`,
+`<b>Linha do quadril:</b> risque uma linha horizontal a ${V("h")} cm da cintura.`,
+`<b>Curva da lateral:</b> na cintura, entre ${V("S")} cm a partir da lateral e suba 1 cm. Ligue esse ponto à linha do quadril com uma curva suave.`,
+`<b>Cintura:</b> ligue o centro da frente ao ponto elevado da lateral com uma linha levemente curva. A cintura do molde deve medir ${V("Wc")} cm, sem contar as pences.`,
+`<b>Pences da frente:</b> ${V("dartTxt")} na cintura, com 9 cm de comprimento, apontando para baixo. Divida a cintura em partes iguais para posicionar.`,
+"<b>Costas:</b> repita o mesmo retângulo, mas no centro das costas abaixe a cintura 1 cm. As pences das costas têm a mesma abertura e 13 cm de comprimento.",
+`<b>Marcações nas costas:</b> fim do zíper a 18 cm da cintura<span data-v="slitStep"></span>.`,
+"<b>Fio reto:</b> desenhe uma seta paralela ao centro em cada peça. Na frente, escreva DOBRA no centro.",
+"<b>Margens de costura:</b> cintura 1 cm, laterais 1,5 cm, centro das costas 2 cm, bainha 4 cm. A frente não tem margem no centro porque vai na dobra.",
+`<b>Cós:</b> retângulo de ${V("cosL")} × 9 cm. Fica com 3,5 cm de altura pronto, dobrado ao meio.`,
+"<b>Recorte</b> as três peças de papel e escreva nelas: nome, quantas vezes cortar e as suas medidas."
+],
+notes:[{k:"Dica",p:"Antes de recortar, meça a cintura do molde com a fita em pé, seguindo a curva. Sem as pences, ela deve dar um quarto da sua cintura mais 0,5 cm."}]},
+
+prepTecido("Tecido lavado e passado."),
+
+{t:"Corte e marcação",time:"45 min",done:"Peças cortadas. Agora é com a máquina.",intro:"Meça duas vezes, corte uma. Marque tudo no avesso, com giz.",
+steps:[
+"<b>Frente:</b> encoste o centro do molde exatamente na dobra do tecido.",
+"<b>Costas:</b> posicione com a seta de fio reto paralela à ourela. Meça a distância da seta à ourela nas duas pontas: tem que dar igual.",
+"<b>Prenda</b> com alfinetes ou pesos e contorne o molde com giz.",
+"<b>Corte</b> com a tesoura de tecido, em cortes longos, sem levantar o tecido da mesa.",
+"<b>Corte o cós</b> (1 peça) e a entretela com metade da largura do cós.",
+"<b>Piques:</b> corte pequeno de 3 mm na margem para marcar linha do quadril, fim do zíper, início da fenda e centro da frente.",
+"<b>Pences:</b> marque as pernas com piques na cintura e a ponta com um alfinete. Risque a pence no avesso."
+],
+notes:[{k:"Atenção",warn:true,p:"Nunca corte papel com a tesoura de tecido. Ela perde o fio rápido e passa a mastigar o tecido."}]},
+
+prepMaquina("Máquina pronta para costurar.","no tamanho escolhido no módulo 1"),
+
+{t:"Chulear as bordas",time:"20 min",done:"Bordas chuleadas.",intro:"Tecido plano desfia. Sem máquina overloque, o zigue-zague faz esse acabamento antes de montar.",
+steps:[
+"<b>Selecione o zigue-zague</b> com largura perto de 4 mm (o máximo é 6) e comprimento perto de 1,5.",
+"<b>Teste num retalho:</b> a agulha deve cair dentro do tecido de um lado e logo fora da borda do outro, abraçando a beirada.",
+"<b>Chuleie</b> as laterais das três peças, o centro das duas costas e a bainha. A cintura não precisa: ela fica dentro do cós.",
+"<b>Volte</b> para ponto reto, comprimento 2,5."
+]},
+
+{t:"Pences",time:"20 min",done:"Pences prontas. A saia já tem forma.",intro:"As pences tiram a sobra de tecido na cintura e dão forma sobre o quadril.",
+steps:[
+"<b>Dobre a pence</b> direito com direito, casando os dois piques da cintura. Prenda com alfinete.",
+"<b>Costure</b> da cintura para a ponta. Nos últimos 2 cm, vá chegando bem perto da dobra até sair do tecido.",
+"<b>Na cintura</b>, use a alavanca de retrocesso para travar a costura.",
+"<b>Na ponta, não dê ré.</b> Deixe 10 cm de linha e dê dois nós à mão. Ré na ponta forma um bico.",
+"<b>Passe</b> as pences viradas para o centro, sobre a ponta de uma almofada ou toalha enrolada."
+]},
+
+{t:"Centro das costas e zíper",time:"60 min",done:"Zíper aplicado! Esse era o mais difícil.",intro:"O zíper centralizado é o mais fácil: você fecha a abertura com ponto largo, aplica o zíper por cima e depois desmancha.",
+steps:[
+"<b>Una as duas costas</b> pelo centro, direito com direito, margem de 2 cm.",
+"<b>Da cintura ao pique do zíper:</b> ponto de alinhavo, comprimento máximo (4 mm), sem retrocesso.",
+"<b>Do pique do zíper ao pique da fenda:</b> ponto 2,5 com retrocesso no começo e no fim. Abaixo disso fica aberto.",
+"<b>Abra a costura a ferro</b> em todo o comprimento, inclusive a parte alinhavada e as margens da fenda.",
+"<b>Troque para a sapatilha de zíper:</b> pressione a alavanca da haste para soltar a sapatilha atual e encaixe a nova.",
+"<b>Posicione o zíper</b> de face para baixo sobre a costura aberta, no avesso, com os dentes em cima da linha do alinhavo. Prenda com alfinetes.",
+"<b>Pelo direito</b>, costure a 7 mm de um lado da costura, atravesse embaixo do fim do zíper e suba pelo outro lado.",
+"<b>Ao chegar no cursor</b>, pare com a agulha baixada, levante a sapatilha, puxe o cursor para trás da agulha e continue.",
+"<b>Desmanche o alinhavo</b> com o abridor de casas. O zíper aparece."
+],
+notes:[{k:"Na sua Facilita Pro",p:"A sapatilha de zíper encaixa à esquerda ou à direita da agulha. Troque o lado quando mudar de lado do zíper, para costurar sempre colado aos dentes."}]},
+
+{t:"Fenda",time:"20 min",done:"Fenda feita.",intro:"Uma fenda simples: a costura do centro fica aberta embaixo e as bordas recebem acabamento. Se a saia ficou acima do joelho, pule este módulo marcando os passos.",
+steps:[
+"<b>Dobre as margens</b> de 2 cm da abertura para o avesso. Elas já estão chuleadas.",
+"<b>Passe</b> bem as dobras.",
+"<b>Pesponte</b> cada lado a 1,5 cm da borda, do topo da fenda até a bainha.",
+"<b>Reforce o topo</b> com uma costura curta na horizontal, indo e voltando com retrocesso. É o ponto que mais força quando você anda."
+]},
+
+{t:"Laterais e prova",time:"40 min",done:"Prova feita, laterais fechadas.",intro:"É aqui que a saia se ajusta ao seu corpo. Não pule a prova.",
+steps:[
+"<b>Una frente e costas</b> pelas laterais, direito com direito, casando cintura, pique do quadril e bainha.",
+"<b>Alinhave</b> as laterais com ponto 4 mm.",
+"<b>Prove</b> com o zíper fechado e a cintura presa com um alfinete.",
+"<b>Ajuste:</b> se ficou larga, costure mais para dentro, igual dos dois lados. Se apertou no quadril, solte até 0,5 cm em cada lateral.",
+"<b>Costure definitivo</b> com ponto 2,5 e retrocesso no começo e no fim.",
+"<b>Abra as costuras</b> a ferro."
+],
+notes:[{k:"Dica",p:"Anote no molde de papel cada ajuste feito na prova. A segunda saia já sai certa."}]},
+
+{t:"Cós",time:"60 min",done:"Cós no lugar.",intro:"O cós dá firmeza à cintura e é onde fica o botão.",
+steps:[
+"<b>Cole a entretela</b> no avesso da metade do cós. Pressione o ferro por 10 a 15 segundos em cada ponto, sem arrastar.",
+"<b>Passe o cós</b> dobrado ao meio no comprimento. Vinque 1 cm para dentro na borda sem entretela.",
+"<b>Una o lado com entretela</b> à cintura da saia, direito com direito. Deixe 1 cm sobrando numa ponta e 5 cm na outra (1 cm de margem + 4 cm de transpasse, onde vai o botão).",
+"<b>Costure a 1 cm.</b> Sobre a emenda do zíper, gire o volante à mão em vez de usar o pedal.",
+"<b>Feche as pontas:</b> dobre o cós direito com direito, costure as pontas, corte os cantos em diagonal e desvire.",
+"<b>Rebata</b> a borda vincada por dentro, cobrindo a costura. Prenda com alfinetes.",
+"<b>Pesponte</b> pelo direito, bem rente à costura da cintura, prendendo o lado de dentro."
+],
+notes:[{k:"Na sua Facilita Pro",p:"Se o tecido não andar bem nas camadas grossas, ajuste a pressão da sapatilha no parafuso de pressão, no topo da máquina, girando com uma moeda. Depois volte ao ajuste normal."}]},
+
+{t:"Casa e botão",time:"25 min",done:"Casa e botão prontos.",intro:"A Facilita Pro faz a casa em um passo, no tamanho do botão, e também prega o botão.",
+steps:[
+"<b>Marque a casa</b> no transpasse do cós, na horizontal, centralizada na altura.",
+"<b>Encaixe a sapatilha de casa</b>, coloque o botão no suporte de trás da sapatilha e feche o suporte.",
+"<b>Selecione o ponto de casa</b> no seletor e abaixe a alavanca do caseador, como mostra o manual.",
+"<b>Teste num retalho</b> de tecido com entretela antes de fazer na saia.",
+"<b>Faça a casa</b> no cós. A máquina completa o caseado sozinha.",
+"<b>Abra a casa</b> com o abridor. Espete um alfinete atravessado no fim da casa para não cortar além.",
+"<b>Prepare para pregar o botão:</b> abaixe os dentes com o rebaixador e encaixe a sapatilha de pregar botão.",
+"<b>Pregue o botão</b> com zigue-zague de largura igual à distância entre os furos. Gire o volante à mão na primeira passada para conferir se a agulha cai nos furos, depois dê umas 8 passadas.",
+"<b>Levante os dentes</b> de novo pelo rebaixador. Sem isso o tecido não anda na próxima costura."
+]},
+
+{t:"Bainha",time:"40 min",done:"Bainha feita. Falta pouco!",intro:"A bainha define o comprimento final. Vista a saia para marcar.",
+steps:[
+"<b>Prove</b> e marque o comprimento final com alfinetes ou giz.",
+"<b>Dobre a margem</b> de 4 cm para o avesso (a borda já está chuleada) e passe.",
+"<b>Na fenda</b>, dobre a bainha primeiro e a borda da fenda por cima. Prenda o canto com pontos à mão.",
+"<b>Prenda a bainha</b> com ponto invisível à mão (fica mais bonito) ou com pesponto reto à máquina a 3,5 cm da borda, pelo direito."
+],
+notes:[{k:"Na sua Facilita Pro",p:"Para costurar a bainha à máquina, tire a extensão da base e use o braço livre: a saia veste a máquina e gira sem franzir."}]},
+
+{t:"Acabamento",time:"15 min",done:"Saia pronta!",intro:"Os últimos detalhes fazem a saia parecer comprada.",
+steps:[
+"<b>Corte as linhas</b> soltas, por dentro e por fora.",
+"<b>Passe a saia toda</b> pelo avesso ou com um pano úmido por cima, para não dar brilho no tecido.",
+"<b>Vista</b> e confira zíper, botão e caimento.",
+"<b>Anote</b> no molde o que você mudaria na próxima saia."
+],trouble:true}
+];
+
+const saiaCalc={
+fields:[
+{k:"c",l:"Cintura",min:40,max:160,def:72},
+{k:"q",l:"Quadril",min:50,max:180,def:100},
+{k:"h",l:"Alt. quadril",min:12,max:30,def:20},
+{k:"L",l:"Comprimento",min:35,max:100,def:58},
+{k:"fw",l:"Larg. tecido",sel:[["110","1,10 m"],["140","1,40 m"],["150","1,50 m"]],def:"150"}
+],
+rows:[["Largura do molde (¼ quadril + 1 cm)","W"," cm"],["Cintura do molde (¼ cintura + 0,5 cm)","Wc"," cm"],["Entrada na lateral","S"," cm"],["Pences em cada quarto","dartShort",""],["Cós (corte)","cosTxt",""],["Fenda nas costas","slitTxt",""],["Tecido para comprar","fab",""]],
+compute(x){
+  const {c,q,h,L,fw}=x;
+  if(![c,q,h,L].every(n=>n>0)) return {error:"Preencha as quatro medidas para calcular o molde."};
+  if(q<=c) return {error:"Confira as medidas: o quadril costuma ser maior que a cintura."};
+  if(h>=L-10) return {error:"A altura do quadril parece grande para esse comprimento. Confira as medidas."};
+  const W=q/4+1, Wc=c/4+0.5, D=W-Wc;
+  let S=Math.min(2.5,D*0.35), R=D-S, n=R<0.6?0:(R>3?2:1);
+  if(n===0){S=D;R=0}
+  const P=n?R/n:0, slit=L>=55?Math.round(Math.min(22,Math.max(15,L*0.3))):0;
+  const one=4*W+10<=fw-4; let cm=one?L+26:2*(L+5)+20; cm=Math.ceil(cm/10)*10;
+  const v={L,h,W:r5(W),Wc:r5(Wc),S:r5(S),P:r5(P),n,slit};
+  const out={W:fmt(v.W),Wc:fmt(v.Wc),S:fmt(v.S),h:fmt(h),L:fmt(L),cosL:fmt(r5(c+7)),cosTxt:`${fmt(r5(c+7))} × 9 cm`,
+    dartTxt:n===0?"sem pence (a curva lateral resolve)":n===1?`1 pence de ${fmt(v.P)} cm de abertura`:`2 pences de ${fmt(v.P)} cm de abertura cada`,
+    dartShort:n===0?"nenhuma":`${n} × ${fmt(v.P)} cm`,slitTxt:slit?`${slit} cm`:"não precisa",
+    slitStep:slit?` e início da fenda a ${slit} cm acima da bainha`:" (com esse comprimento não precisa de fenda)",
+    fab:`${fmt(cm/100)} m${one?"":" (2 comprimentos)"}`};
+  return {v,out};
+},
+draw(v){
+  const {W,L,h,S,P,n}=v, s=Math.min(170/W,300/L);
+  const pw=W*s, gap=90, padL=44, padT=40, vbW=padL+pw+gap+pw+30, vbH=padT+L*s+44;
+  const panel=(ox,back)=>{
+    const X=x=>(ox+x*s).toFixed(1), Y=y=>(padT+y*s).toFixed(1);
+    const y0=back?1:0, ws=W-S;
+    const d=`M${X(0)},${Y(y0)} Q${X(ws*0.6)},${Y(back?0.6:0)} ${X(ws)},${Y(-1)} C${X(W-S*0.2)},${Y(h*0.3)} ${X(W)},${Y(h*0.6)} ${X(W)},${Y(h)} L${X(W)},${Y(L)} L${X(0)},${Y(L)} Z`;
+    let g=`<path d="${d}" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6"/>`;
+    g+=`<line x1="${X(0)}" y1="${Y(h)}" x2="${X(W)}" y2="${Y(h)}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>`;
+    const len=back?13:9;
+    for(let i=1;i<=n;i++){const xc=ws*i/(n+1),t=xc/ws,yw=back?(1-2*t*t):(-t*t);
+      g+=`<path d="M${X(xc-P/2)},${Y(yw)} L${X(xc)},${Y(yw+len)} L${X(xc+P/2)},${Y(yw)} Z" fill="var(--chalk-soft)" stroke="var(--chalk)" stroke-width="1.3"/>`}
+    const ax=W*0.62;
+    g+=`<line x1="${X(ax)}" y1="${Y(h+6)}" x2="${X(ax)}" y2="${Y(L-6)}" stroke="var(--muted)" stroke-width="1.2"/><path d="M${X(ax)},${Y(h+6)} l-4,8 h8 Z M${X(ax)},${Y(L-6)} l-4,-8 h8 Z" fill="var(--muted)"/>`;
+    g+=`<text x="${X(W/2)}" y="${padT-20}" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)" font-family="Archivo, Arial, sans-serif">${back?"B · COSTAS":"A · FRENTE"}</text>`;
+    g+=`<text x="${X(W/2)}" y="${padT-6}" text-anchor="middle" font-size="10" fill="var(--muted)" ${MONO}>${fmt(W)} cm</text>`;
+    g+=`<text x="${(+X(W)+5)}" y="${(+Y(h)+3)}" font-size="9.5" fill="var(--muted)" ${MONO}>quadril</text>`;
+    if(!back) g+=`<text transform="translate(${(+X(0)-8)},${Y(L/2)}) rotate(-90)" text-anchor="middle" font-size="10" fill="var(--chalk)" ${MONO}>DOBRA DO TECIDO</text>`;
+    else{
+      const notch=(y,lab)=>`<line x1="${(+X(0)-5)}" y1="${Y(y)}" x2="${(+X(0)+6)}" y2="${Y(y)}" stroke="var(--warn)" stroke-width="2"/><text x="${(+X(0)+9)}" y="${(+Y(y)+3.5)}" font-size="9.5" fill="var(--warn)" ${MONO}>${lab}</text>`;
+      g+=notch(18,"fim do zíper"); if(v.slit) g+=notch(L-v.slit,"início da fenda");
+    }
+    g+=`<text x="${X(W/2)}" y="${(+Y(L)+16)}" text-anchor="middle" font-size="10" fill="var(--muted)" ${MONO}>comprimento ${fmt(L)} cm</text>`;
+    return g;
+  };
+  return `<svg viewBox="0 0 ${vbW.toFixed(0)} ${vbH.toFixed(0)}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Molde do quarto da frente e do quarto das costas da saia">${panel(padL,false)}${panel(padL+pw+gap,true)}<text x="${vbW/2}" y="${vbH-6}" text-anchor="middle" font-size="9.5" fill="var(--muted)" ${MONO}>sem margens de costura · pences em destaque</text></svg>`;
+}};
+
+/* ---------- Projetos ---------- */
+const SKETCH={
+regata:`<svg class="sketch" viewBox="0 0 120 140" aria-hidden="true"><path d="M33 12 L46 12 Q60 44 74 12 L87 12 Q88 42 103 54 L107 130 L13 130 L17 54 Q32 42 33 12 Z" fill="var(--chalk-soft)" stroke="var(--chalk)" stroke-width="2" stroke-linejoin="round"/><path d="M40 17 Q60 52 80 17" fill="none" stroke="var(--chalk)" stroke-width="1.2" stroke-dasharray="3 3"/><path d="M17 66 L34 63 M103 66 L86 63" stroke="var(--chalk)" stroke-width="1.6" stroke-linecap="round"/><path d="M14 124 L106 124" stroke="var(--chalk)" stroke-width="1.2" stroke-dasharray="3 3"/></svg>`,
+saia:`<svg class="sketch" viewBox="0 0 120 140" aria-hidden="true"><rect x="28" y="12" width="64" height="12" rx="1" fill="var(--chalk-soft)" stroke="var(--chalk)" stroke-width="2"/><circle cx="86" cy="18" r="2" fill="var(--chalk)"/><path d="M28 24 L92 24 Q99 44 98 60 L101 130 L19 130 L22 60 Q21 44 28 24 Z" fill="var(--chalk-soft)" stroke="var(--chalk)" stroke-width="2" stroke-linejoin="round"/><path d="M47 24 L48 46 M73 24 L72 46" stroke="var(--chalk)" stroke-width="1.6" stroke-linecap="round"/><path d="M20 123 L100 123" stroke="var(--chalk)" stroke-width="1.2" stroke-dasharray="3 3"/></svg>`
+};
+const COURSES=[
+{id:"regata",num:"Projeto 1",badge:"Comece por aqui",cardTitle:"Blusa regata básica",cardDesc:"Duas peças, sem zíper nem botão. Você aprende pence, viés e bainha: a base para todas as outras peças.",
+ storeP:"regata.progress.v1",storeM:"regata.medidas.v1",tagLine:"Regata · 2026",
+ eyebrow:"Molde básico · Projeto 1 · Singer Facilita Pro 4423",h1:"Sua primeira <em>regata</em>, do molde ao viés",
+ lede:"O seu primeiro projeto. São 14 módulos para fazer uma regata de tecido plano, com pence de busto, decote e cavas com viés e bainha estreita. Cada passo tem uma bolinha para marcar, e o progresso fica salvo neste navegador.",
+ facts:[["14","módulos"],["~7 h","no total"],["4","encontros sugeridos"],["2","peças, sem fecho"]],
+ pieces:[["A","Frente","1× na dobra"],["B","Costas","1× na dobra"]],
+ avi:"Aviamentos: viés pronto de algodão de 2 cm e linha de poliéster na cor do tecido.",
+ sessions:[["Encontro 1 · ~2 h","Planejar e modelar","Módulos 1 a 3: tecido, medidas e molde de papel."],["Encontro 2 · ~2h10","Cortar e começar","Módulos 4 a 8: tecido, corte, máquina, chuleado e pences."],["Encontro 3 · ~1h45","Montar e acabar o decote","Módulos 9 a 11: ombros, prova e viés no decote e nas cavas."],["Encontro 4 · ~1h10","Fechar","Módulos 12 a 14: laterais, bainha e passadoria."]],
+ modules:REGATA_MODULES,calc:regataCalc,
+ finale:{t:"Parabéns, Gabi!",p:"Sua primeira regata está pronta. Agora você já sabe fazer pence, viés e bainha. O próximo projeto, a saia reta, usa tudo isso.",next:"saia",nextLabel:"Ir para a saia reta"}},
+{id:"saia",num:"Projeto 2",badge:"Curso completo",cardTitle:"Curso de costura completo: saia reta",cardDesc:"Pences, zíper, fenda, cós com entretela, casa e botão. Junta tudo o que você aprendeu na regata e acrescenta os fechos.",
+ storeP:"saiaReta.progress.v1",storeM:"saiaReta.medidas.v1",tagLine:"Saia reta · 2026",
+ eyebrow:"Curso completo · Projeto 2 · Singer Facilita Pro 4423",h1:"Sua primeira <em>saia reta</em>, do molde à bainha",
+ lede:"São 15 módulos para fazer uma saia reta com pences, zíper nas costas, fenda e cós com botão, usando a sua Facilita Pro. Cada passo tem uma bolinha para marcar, e o progresso fica salvo neste navegador.",
+ facts:[["15","módulos"],["~9 h","no total"],["4","encontros sugeridos"],["4","sapatilhas da máquina"]],
+ pieces:[["A","Frente","1× na dobra"],["B","Costas","2× espelhadas"],["C","Cós","1× + entretela"]],
+ avi:"Aviamentos: zíper comum de 20 cm, 1 botão de 1,5 a 2 cm, entretela termocolante média e linha de poliéster na cor do tecido.",
+ sessions:[["Encontro 1 · ~2 h","Planejar e modelar","Módulos 1 a 3: tecido, medidas e molde de papel."],["Encontro 2 · ~2 h","Cortar e preparar","Módulos 4 a 6: tecido lavado, corte e máquina regulada."],["Encontro 3 · ~2h40","Montar a saia","Módulos 7 a 11: chuleado, pences, zíper, fenda e laterais."],["Encontro 4 · ~2h15","Acabar","Módulos 12 a 15: cós, casa, botão, bainha e passadoria."]],
+ modules:SAIA_MODULES,calc:saiaCalc,
+ finale:{t:"Parabéns, Gabi!",p:"Sua saia reta está pronta. Tire uma foto vestindo e guarde o molde com os ajustes: a próxima vai ser mais rápida.",next:"home",nextLabel:"Voltar aos projetos"}}
+];
+
+/* ---------- Render ---------- */
+const toast=$("#toast"),toastMsg=$("#toastMsg");let toastT;
+function showToast(t){toastMsg.textContent=t;toast.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>toast.classList.remove("show"),3200)}
+let active="home";
+const views=$("#views"), cards=$("#cards");
+COURSES.forEach((c,ci)=>{
+  c.state=load(c.storeP,{});
+  c.total=c.modules.reduce((a,m)=>a+m.steps.length,0);
+  cards.insertAdjacentHTML("beforeend",`<a href="#${c.id}" class="card${ci===0?" first":""}" data-open="${c.id}">${SKETCH[c.id]}
+    <span class="k">${c.num}<span class="badge">${c.badge}</span></span>
+    <h2>${c.cardTitle}</h2><p>${c.cardDesc}</p>
+    <span class="meta">${c.facts[0][0]} módulos · ${c.facts[1][0]}</span>
+    <span class="mini"><span class="tape"><span class="tape-fill" data-cardfill="${c.id}" style="display:block"></span></span><span data-cardcount="${c.id}"></span></span>
+    <span class="go" data-cardgo="${c.id}">Começar</span></a>`);
+
+  const root=document.createElement("main"); root.id="view-"+c.id; root.hidden=true; c.root=root;
+  let h=`<section class="chero gutter"><div class="inner"><div>
+    <button class="back" type="button" data-open="home">← Todos os projetos</button>
+    <div class="eyebrow">${c.eyebrow}</div><h1>${c.h1}</h1><p class="lede">${c.lede}</p>
+    <div class="facts">${c.facts.map(f=>`<span><b>${f[0]}</b> ${f[1]}</span>`).join("")}</div></div>
+    <aside class="envelope" aria-label="Peças do molde">
+      <div class="tag"><span class="s">Feito à mão por</span><span class="nm">Gabi</span><span class="s">${c.tagLine}</span></div>
+      <h3>Peças do molde</h3><ul class="pieces">${c.pieces.map(p=>`<li><span class="lt">${p[0]}</span><span>${p[1]}</span><span class="qt">${p[2]}</span></li>`).join("")}</ul>
+      <hr><p>${c.avi}</p></aside></div></section>
+  <section class="plan gutter"><div class="inner"><h2>Plano de encontros</h2><div class="sessions">${c.sessions.map(s=>`<div class="session"><span class="k">${s[0]}</span><span class="t">${s[1]}</span><span class="d">${s[2]}</span></div>`).join("")}</div></div></section>
+  <section class="course gutter"><div class="inner">
+    <nav class="rail" aria-label="Módulos"><h2>Módulos</h2><ol class="navlist">${navItems(c)}</ol>
+      <div class="rail-actions"><button class="btn" type="button" data-reset="${c.id}">Recomeçar progresso</button></div></nav>
+    <div class="modules">
+      <details class="mobile-nav"><summary>Ir para um módulo</summary><ol class="navlist">${navItems(c)}</ol></details>
+      <div class="finale" data-finale hidden><span class="hand">${c.finale.t}</span><p>${c.finale.p}</p><button type="button" data-open="${c.finale.next}">${c.finale.nextLabel}</button></div>`;
+  c.modules.forEach((m,i)=>{
+    const n=i+1, mid=`${c.id}-m${n}`;
+    h+=`<section class="module" id="${mid}"><div class="mhead"><span class="mnum">${String(n).padStart(2,"0")}</span><div><h2 class="mtitle">${m.t}</h2><div class="mmeta">${m.time}</div></div><span class="mstatus" data-status="${n}"></span></div>
+      <p class="intro">${m.intro}</p><ul class="steps">`;
+    m.steps.forEach((s,j)=>{const key=`m${n}s${j+1}`;h+=`<li class="step"><label><input type="checkbox" id="${c.id}-${key}" data-key="${key}" data-mod="${n}"${c.state[key]?" checked":""}><span>${s}</span></label></li>`});
+    h+="</ul>";
+    if(m.calc) h+=calcHTML(c);
+    if(m.machine) h+=`<div class="machine">${MACHINE.map(p=>`<div class="part"><span class="pn">${p[0]}</span><span class="pd">${p[1]}</span></div>`).join("")}</div>`;
+    (m.notes||[]).forEach(x=>{h+=`<div class="note${x.warn?" warn":""}"><span class="lbl">${x.k}</span><p>${x.p}</p></div>`});
+    if(m.trouble) h+=`<div class="calc"><h3>Se algo der errado na máquina</h3><div>${TROUBLE.map(r=>`<div class="trow"><span class="sy">${r[0]}</span><span>${r[1]}</span></div>`).join("")}</div></div>`;
+    h+="</section>";
+  });
+  h+=`</div></div></section>`;
+  root.innerHTML=h; views.appendChild(root);
+  setupCalc(c); setupProgress(c);
+});
+
+function navItems(c){return c.modules.map((m,i)=>`<li><a href="#${c.id}-m${i+1}" data-nav="${i+1}"><span class="n">${String(i+1).padStart(2,"0")}</span><span class="ttl">${m.t}</span><span class="c" data-navc="${i+1}"></span></a></li>`).join("")}
+function calcHTML(c){
+  return `<div class="calc"><div><h3>Calculadora do molde</h3><span class="sample" data-sample>Valores de exemplo. Troque pelas suas medidas.</span></div>
+  <div class="fields">${c.calc.fields.map(f=>{const id=`${c.id}-in-${f.k}`;
+    return f.sel?`<div class="field"><label for="${id}">${f.l}</label><div class="box"><select id="${id}" data-f="${f.k}">${f.sel.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("")}</select></div></div>`
+    :`<div class="field"><label for="${id}">${f.l}</label><div class="box"><input id="${id}" data-f="${f.k}" type="number" inputmode="decimal" min="${f.min}" max="${f.max}" step="0.5"><span class="u">cm</span></div></div>`}).join("")}</div>
+  <p class="calc-msg" data-msg hidden></p>
+  <div class="results"><table class="rtable"><tbody>${c.calc.rows.map(r=>`<tr><th>${r[0]}</th><td>${V(r[1])}${r[2]}</td></tr>`).join("")}</tbody></table>
+  <div class="drawing" data-draw aria-label="Desenho do molde"></div></div></div>`;
+}
+function setupCalc(c){
+  const root=c.root, saved=load(c.storeM,null);
+  const ins=$$("[data-f]",root);
+  ins.forEach(el=>{const f=c.calc.fields.find(x=>x.k===el.dataset.f);el.value=saved&&saved[f.k]!=null?saved[f.k]:f.def});
+  $("[data-sample]",root).hidden=!!saved;
+  const run=()=>{
+    const x={}; ins.forEach(el=>x[el.dataset.f]=parseFloat(el.value));
+    const res=c.calc.compute(x), msg=$("[data-msg]",root);
+    if(res.error){msg.textContent=res.error;msg.hidden=false}else{msg.hidden=true;$("[data-draw]",root).innerHTML=c.calc.draw(res.v)}
+    const out=res.out||{};
+    $$("[data-v]",root).forEach(el=>{const k=el.dataset.v;el.textContent=out[k]!=null?out[k]:(el.tagName==="SPAN"?"":"–")});
+  };
+  ins.forEach(el=>el.addEventListener("input",()=>{const o={};ins.forEach(i=>o[i.dataset.f]=i.value);save(c.storeM,o);$("[data-sample]",root).hidden=true;run()}));
+  run();
+}
+
+
+function setupProgress(c){
+  c.boxes=$$('.step input[type="checkbox"]',c.root); c.completed=new Set();
+  c.boxes.forEach(b=>b.addEventListener("change",()=>{if(b.checked)c.state[b.dataset.key]=true;else delete c.state[b.dataset.key];save(c.storeP,c.state);update(c,true)}));
+  const rb=$("[data-reset]",c.root);let armT;
+  rb.addEventListener("click",()=>{
+    if(!rb.classList.contains("armed")){rb.classList.add("armed");rb.textContent="Clique de novo para confirmar";armT=setTimeout(()=>{rb.classList.remove("armed");rb.textContent="Recomeçar progresso"},4000);return}
+    clearTimeout(armT);c.state={};save(c.storeP,c.state);c.boxes.forEach(b=>b.checked=false);update(c,false);
+    rb.classList.remove("armed");rb.textContent="Progresso zerado";setTimeout(()=>rb.textContent="Recomeçar progresso",2000);
+  });
+  update(c,false);
+}
+function update(c,fromUser){
+  const done=c.boxes.filter(b=>b.checked).length, pct=c.total?Math.round(done/c.total*100):0;
+  c.done=done;c.pct=pct;
+  c.modules.forEach((m,i)=>{
+    const n=String(i+1), bs=c.boxes.filter(b=>b.dataset.mod===n), d=bs.filter(b=>b.checked).length, all=d===bs.length;
+    $(`[data-status="${n}"]`,c.root).textContent=all?"Concluído":`${d}/${bs.length}`;
+    $(`#${c.id}-m${n}`).classList.toggle("done",all);
+    $$(`[data-navc="${n}"]`,c.root).forEach(x=>x.textContent=all?"✓":`${d}/${bs.length}`);
+    $$(`[data-nav="${n}"]`,c.root).forEach(a=>a.classList.toggle("done",all));
+    if(all&&!c.completed.has(n)){c.completed.add(n);if(fromUser&&pct<100)showToast(m.done)}
+    if(!all)c.completed.delete(n);
+  });
+  const fin=$("[data-finale]",c.root), was=fin.hidden; fin.hidden=pct<100;
+  if(fromUser&&pct===100&&was){showToast(c.id==="regata"?"Regata pronta! Você conseguiu.":"Saia pronta! Você conseguiu.");fin.scrollIntoView({behavior:"smooth",block:"center"})}
+  $(`[data-cardfill="${c.id}"]`).style.width=pct+"%";
+  $(`[data-cardcount="${c.id}"]`).textContent=`${done}/${c.total} · ${pct}%`;
+  $(`[data-cardgo="${c.id}"]`).textContent=pct===100?"Rever":done?"Continuar":"Começar";
+  if(active===c.id) updateTop();
+}
+function updateTop(){
+  const tape=$("#topTape"),cnt=$("#topCount");
+  if(active==="home"){tape.hidden=true;cnt.textContent=`${COURSES.length} projetos`;return}
+  const c=COURSES.find(x=>x.id===active);
+  tape.hidden=false;$("#topFill").style.width=c.pct+"%";tape.setAttribute("aria-valuenow",c.pct);
+  cnt.innerHTML=`${c.done} de ${c.total} passos<span class="pct"> · ${c.pct}%</span>`;
+}
+
+/* ---------- Navegação ---------- */
+function show(id,anchor){
+  if(id!=="home"&&!COURSES.some(c=>c.id===id)) id="home";
+  active=id;
+  $("#home").hidden=id!=="home";
+  COURSES.forEach(c=>c.root.hidden=c.id!==id);
+  $("#brand").textContent=id==="home"?"Ateliê da Gabi":`Ateliê da Gabi · ${id==="regata"?"Regata":"Saia"}`;
+  updateTop();
+  if(anchor){const el=document.getElementById(anchor);if(el){requestAnimationFrame(()=>el.scrollIntoView({behavior:"smooth",block:"start"}));return}}
+  window.scrollTo({top:0});
+}
+function route(){
+  const hsh=(location.hash||"").slice(1);
+  if(!hsh){show("home");return}
+  const cid=hsh.split("-")[0];
+  show(cid,hsh.includes("-m")?hsh:null);
+}
+document.addEventListener("click",e=>{
+  const o=e.target.closest("[data-open]");
+  if(o){e.preventDefault();const id=o.dataset.open;try{location.hash=id==="home"?"":id}catch(_){}if(id==="home")history.replaceState?.(null,"",location.pathname+location.search);show(id);return}
+  const a=e.target.closest(".navlist a");
+  if(a){const d=a.closest("details");if(d)d.open=false}
+});
+$("#brand").addEventListener("click",()=>{try{history.replaceState(null,"",location.pathname+location.search)}catch(_){}show("home")});
+window.addEventListener("hashchange",route);
+route();
+})();
+</script>
+
+</body>
+</html>
